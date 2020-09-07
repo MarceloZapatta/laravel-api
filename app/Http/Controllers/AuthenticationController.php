@@ -41,11 +41,11 @@ class AuthenticationController
 
             $registred = $this->authenticationService->register($request);
 
-            if ($registred) {
-                return response()->json(['message' => 'User registred.']);
-            } else {
+            if (!$registred) {
                 return response()->json(['message' => 'Error when trying to register the user.'], 500);
             }
+
+            return response()->json(['message' => 'User registred.'], 201);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error ocurred.'
