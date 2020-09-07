@@ -15,8 +15,8 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('register', 'AuthenticationController@register');
 $router->get('login', 'AuthenticationController@login');
+$router->get('account/register', 'AuthenticationController@register');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('account/deposit', 'AccountsController@deposit');
