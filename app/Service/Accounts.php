@@ -44,4 +44,21 @@ class Accounts {
 
         return true;
     }
+
+    /**
+     * Return the current account balance
+     * @return double
+     */
+    public function balance()
+    {
+        $user = Auth::user();
+
+        $account = $user->account;
+
+        if (!$account) {
+            throw new Exception('Account not found.');
+        }
+
+        return (double) $account->balance;
+    }
 }

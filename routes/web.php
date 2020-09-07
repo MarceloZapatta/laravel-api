@@ -20,4 +20,5 @@ $router->get('login', 'AuthenticationController@login');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('account/deposit', 'AccountsController@deposit');
+    $router->get('account/balance', 'AccountsController@balance');
 });

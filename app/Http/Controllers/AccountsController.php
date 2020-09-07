@@ -49,4 +49,25 @@ class AccountsController
             ], 500);
         }
     }
+
+    public function balance()
+    {
+        try {
+            $balance = $this->accountService->balance();
+
+            if (!$balance) {
+                return response()->json([
+                    'message' => 'Error when trying to get the balance.'
+                ], 500);
+            }
+
+            return response()->json([
+                'balance' => $balance
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'An error ocurred.'
+            ], 500);
+        }
+    }
 }
