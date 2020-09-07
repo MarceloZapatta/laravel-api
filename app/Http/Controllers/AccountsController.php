@@ -12,11 +12,11 @@ class AccountsController
     /**
      * @param Accounts
      */
-    private $accountService;
+    private $accountsService;
 
-    public function __construct(Accounts $accountService)
+    public function __construct(Accounts $accountsService)
     {
-        $this->accountService = $accountService;
+        $this->accountsService = $accountsService;
     }
 
     public function deposit(Request $request)
@@ -32,7 +32,7 @@ class AccountsController
                 ], 400);
             }
 
-            $deposit = $this->accountService->deposit($request->amount);
+            $deposit = $this->accountsService->deposit($request->amount);
 
             if (!$deposit) {
                 return response()->json([
@@ -53,7 +53,7 @@ class AccountsController
     public function balance()
     {
         try {
-            $balance = $this->accountService->balance();
+            $balance = $this->accountsService->balance();
 
             if (!$balance) {
                 return response()->json([
