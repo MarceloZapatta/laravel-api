@@ -19,8 +19,5 @@ $router->get('register', 'AuthenticationController@register');
 $router->get('login', 'AuthenticationController@login');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-
-    $router->get('saldo', function () {
-        return 'saldo';
-    });
+    $router->get('account/deposit', 'AccountsController@deposit');
 });

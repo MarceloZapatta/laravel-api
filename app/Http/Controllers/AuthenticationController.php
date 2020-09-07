@@ -19,7 +19,7 @@ class AuthenticationController
     {
         $this->authenticationService = $authenticationService;
     }
-    
+
     /**
      * Register a new user
      * @param Request $request
@@ -32,7 +32,7 @@ class AuthenticationController
                 'email' => 'required|email|unique:users',
                 'password' => 'required',
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'errors' => $validator->errors()
@@ -59,24 +59,30 @@ class AuthenticationController
      */
     public function login(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
 
-        if ($validator->fails()) {
+            if ($validator->fails()) {
+                return response()->json([
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            $token = $this->authenticationService->login($request);
+
+            if (!$token) {
+                return response()->json(['error' => 'Unauthorized'], 401);
+            }
+
+            return $this->respondWithToken($token);
+        } catch (Exception $e) {
             return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
+                'message' => 'An error ocurred.'
+            ], 500);
         }
-
-        $token = $this->authenticationService->login($request);
-
-        if (!$token) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return $this->respondWithToken($token);
     }
 
     /**

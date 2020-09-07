@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Account;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class Accounts {
     /**
@@ -21,5 +23,25 @@ class Accounts {
         ]);
 
         return $account;
+    }
+
+    /**
+     * Make a new deposit in account
+     * @param double $amount
+     */
+    public function deposit($amount)
+    {
+        $user = Auth::user();
+
+        $account = $user->account;
+
+        if (!$account) {
+            throw new Exception('Account not found.');
+        }
+
+        $account->balance += $amount;
+        $account->save();
+
+        return true;
     }
 }
