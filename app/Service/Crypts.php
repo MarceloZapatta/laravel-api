@@ -2,10 +2,13 @@
 
 namespace App\Service;
 
+use App\Account;
+use App\Investiment;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 
-class Crypts {
+class Crypts
+{
     /**
      * Base url of api
      * @var string
@@ -29,5 +32,42 @@ class Crypts {
         $response = $this->client->get('ticker');
 
         return json_decode($response->getBody());
+    }
+
+    public function insufficientFunds($amount, Account $account)
+    {
+        if ((float) $account->balance < (float) $amount) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Buy an amount of the crypt
+     * @param double $amount
+     * @param double $buyPrice
+     * @param Account $account
+     * @return Investiment|null
+     */
+    public function purcharse($amount, $buyPrice, Account $account)
+    {
+        $buyInvestimentPriceType = 1;
+
+        $investiment = Investiment::create([
+            'account_id' => $account->id,
+            'amount' => $amount,
+            'price' => number_format($buyPrice, 5, '.', ''),
+            'investiment_type_id' => $buyInvestimentPriceType
+        ]);
+
+        if (!$investiment) {
+            return false;
+        }
+
+        $account->balance -= $amount;
+        $account->save();
+
+        return $investiment;
     }
 }

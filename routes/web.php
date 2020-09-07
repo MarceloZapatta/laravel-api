@@ -15,7 +15,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->get('login', 'AuthenticationController@login');
+$router->post('login', 'AuthenticationController@login');
 $router->get('account/register', 'AuthenticationController@register');
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
@@ -23,4 +23,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('account/balance', 'AccountsController@balance');
 
     $router->get('btc/price', 'CryptController@price');
+    $router->post('btc/purchase', 'CryptController@purchase');
 });

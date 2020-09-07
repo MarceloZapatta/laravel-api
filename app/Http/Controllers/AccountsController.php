@@ -55,7 +55,7 @@ class AccountsController
         try {
             $balance = $this->accountsService->balance();
 
-            if (!$balance) {
+            if (!is_numeric($balance)) {
                 return response()->json([
                     'message' => 'Error when trying to get the balance.'
                 ], 500);
