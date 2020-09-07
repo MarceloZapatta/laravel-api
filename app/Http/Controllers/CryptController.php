@@ -105,7 +105,30 @@ class CryptController
                 'purchasedAmount' => $purchaseAmount
             ], 200);
         } catch (Exception $e) {
-            dd($e->getMessage());
+            return response()->json([
+                'message' => 'An error occurred.'
+            ], 500);
+        }
+    }
+
+    public function position()
+    {
+        try {
+            $price = $this->price();
+            $sellPrice = $price->getData()->sell;
+
+            if (!$sellPrice) {
+                return response()->json([
+                    'message' => 'An error occurred when trying to get crypt price'
+                ], 503);
+            }
+
+            $position = $this->cryptsService->position($sellPrice);
+
+            return response()->json([
+                'position' => $position
+            ], 200);
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error occurred.'
             ], 500);

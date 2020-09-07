@@ -13,4 +13,9 @@ class Investiment extends Model {
     protected $fillable = [
         'account_id', 'amount', 'price', 'investiment_type_id'
     ];
+
+    public function type()
+    {
+        return $this->belongsTo('App\InvestimentType', 'investiment_type_id');
+    }
 }
