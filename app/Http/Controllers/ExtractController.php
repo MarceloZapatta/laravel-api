@@ -22,6 +22,11 @@ class ExtractController
         $this->extractsServices = $extractsServices;
     }
 
+    /**
+     * Get the extract of account by date
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function extract(Request $request)
     {
         try {
@@ -46,13 +51,16 @@ class ExtractController
     
             return $this->extractsServices->get($request, $account);
         } catch (Exception $e) {
-            dd($e->getMessage());
             return response()->json([
                 'message' => 'An error occurred.'
             ], 500);
         }
     }
 
+    /**
+     * Get the volume of buy and sell in the day
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function volume()
     {
         return $this->extractsServices->getVolume();        
