@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Service\Historys;
+use App\Service\Histories;
 
 class HistoryController extends Controller {
-    private $historyService;
+    private $Historieservice;
 
-    public function __construct(Historys $historyService)
+    public function __construct(Histories $Historieservice)
     {
-        $this->historyService = $historyService;
+        $this->Historieservice = $Historieservice;
     }
 
     public function history()
     {
-        return $this->historyService->get();
+        return $this->Historieservice->get();
     }
 }

@@ -114,7 +114,6 @@ class CryptController
                 'purchasedAmount' => $purchaseAmount
             ], 200);
         } catch (Exception $e) {
-            throw $e;
             return response()->json([
                 'message' => 'An error occurred.'
             ], 500);

@@ -5,7 +5,7 @@ namespace App\Service;
 use App\History;
 use Carbon\Carbon;
 
-class Historys {
+class Histories {
     private $cryptsService;
 
     public function __construct(Crypts $cryptsService)

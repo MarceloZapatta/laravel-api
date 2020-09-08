@@ -4,12 +4,15 @@ namespace App\Service;
 
 use App\Account;
 use App\Investiment;
+use App\Mail\CryptPurchase;
+use App\Mail\CryptSell;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class Crypts
 {
@@ -84,6 +87,9 @@ class Crypts
             $cryptQuantity,
             $account);
 
+        Mail::to(Auth::user())
+            ->send(new CryptPurchase($cryptQuantity, $amount));
+
         return $investiment;
     }
 
@@ -92,6 +98,7 @@ class Crypts
         DB::beginTransaction();
 
         $totalAmountSell = $amount;
+        $totalCryptQuantitySell = 0;
 
         foreach ($investiments as $investiment) {
             $investiment->liquidated_at = Carbon::now();
@@ -111,6 +118,8 @@ class Crypts
                 $sellPrice,
                 $cryptQuantity,
                 $account);
+
+            $totalCryptQuantitySell += $cryptQuantity;
 
             if (number_format($totalAmountSell, 2, '.', '') <= 0) {
                 break;
@@ -134,6 +143,9 @@ class Crypts
             
             $this->purcharse($absoluteValue, $buyPrice, $account);
         }
+
+        Mail::to(Auth::user())
+            ->send(new CryptSell($totalCryptQuantitySell, $totalAmountSell));
 
         DB::commit();
 
