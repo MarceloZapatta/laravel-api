@@ -12,17 +12,24 @@ Instalar dependências npm
 
 `npm i`
 
-Build dos assets
-
-`npm run dev`
-
-
 Copiar o .env.example para a raiz como .env
 Criar um novo banco de dados e configurar no .env
+
+Gerar o APP KEY
+
+`php artisan key:generate`
+
+Gerar o secret do JWT
+
+`php artisan jwt:secret`
 
 Rodar as migrations
 
 `php artisan migrate`
+
+Build dos assets
+
+`npm run dev`
 
 Rodar a api:
 
