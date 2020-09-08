@@ -29,4 +29,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     $router->get('extract', 'ExtractController@extract');
     $router->get('volume', 'ExtractController@volume');
+
+    $router->get('history/store', 'HistoryController@store');
+    $router->get('history', 'HistoryController@history');
 });
