@@ -119,4 +119,34 @@ class Extracts {
             ];
         });
     }
+
+    public function getVolume()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+
+        $extractTypeBuy = 2;
+        $extractTypeSell = 3;
+
+        $extracts = Extract::whereDate('created_at', $today)
+            ->whereIn('extract_type_id', [$extractTypeBuy, $extractTypeSell])
+            ->get();
+
+        $totalBuy = 0;
+        $totalSell = 0;
+
+        foreach ($extracts as $extract) {
+            $data = json_decode($extract->data);
+
+            if ($extract->extract_type_id === $extractTypeBuy) {
+                $totalBuy = $data->cryptQuantity * $data->price;
+            } else {
+                $totalSell = $data->cryptQuantity * $data->sellPrice;
+            }
+        }
+
+        return [
+            'buy' => $totalBuy,
+            'sell' => $totalSell
+        ];
+    }
 }

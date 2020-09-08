@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Extract;
 use App\Service\Extracts;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,5 +51,10 @@ class ExtractController
                 'message' => 'An error occurred.'
             ], 500);
         }
+    }
+
+    public function volume()
+    {
+        return $this->extractsServices->getVolume();        
     }
 }

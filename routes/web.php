@@ -28,4 +28,5 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('btc', 'CryptController@position');
 
     $router->get('extract', 'ExtractController@extract');
+    $router->get('volume', 'ExtractController@volume');
 });
