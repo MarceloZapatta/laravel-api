@@ -19,6 +19,11 @@ class AccountsController
         $this->accountsService = $accountsService;
     }
 
+    /**
+     * Make a new deposit in the account
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function deposit(Request $request)
     {
         try {
@@ -50,6 +55,10 @@ class AccountsController
         }
     }
 
+    /**
+     * Get the balance of the account
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function balance()
     {
         try {
@@ -63,32 +72,6 @@ class AccountsController
 
             return response()->json([
                 'balance' => $balance
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => 'An error ocurred.'
-            ], 500);
-        }
-    }
-
-    public function extract(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                'begin_date' => 'nullable|date_format:Y-m-d',
-                'end_date' => 'nullavel|date_format:Y-m-d'
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'errors' => $validator->errors()
-                ], 400);
-            }
-
-            $extract = $this->accountsService->get($request);
-
-            return response()->json([
-                'extract' => $extract
             ]);
         } catch (Exception $e) {
             return response()->json([
