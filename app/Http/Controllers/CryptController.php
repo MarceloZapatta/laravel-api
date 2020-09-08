@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Service\Accounts;
 use App\Service\Crypts;
+use App\Service\Extracts;
 use App\Service\Investiments;
 use Exception;
 use Illuminate\Http\Request;
@@ -22,8 +23,10 @@ class CryptController
      */
     private $investimentsService;
 
-    public function __construct(Crypts $cryptsService, Investiments $investimentsService)
-    {
+    public function __construct(
+        Crypts $cryptsService, 
+        Investiments $investimentsService
+    ) {
         $this->cryptsService = $cryptsService;
         $this->investimentsService = $investimentsService;
     }
@@ -111,6 +114,7 @@ class CryptController
                 'purchasedAmount' => $purchaseAmount
             ], 200);
         } catch (Exception $e) {
+            throw $e;
             return response()->json([
                 'message' => 'An error occurred.'
             ], 500);
@@ -170,7 +174,6 @@ class CryptController
                 'message' => 'Success.'
             ], 200);
         } catch (Exception $e) {
-            dd($e->getMessage());
             return response()->json([
                 'message' => 'An error occurred.'
             ], 500);

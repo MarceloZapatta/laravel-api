@@ -3,10 +3,22 @@
 namespace App\Service;
 
 use App\Account;
+use App\Extract;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class Accounts {
+    /**
+     * @var Extracts
+     */
+    private $extractsService;
+
+    public function __construct(Extracts $extractsService)
+    {
+        $this->extractsService = $extractsService;
+    }
+
     /**
      * Store a new Account for the user
      * @param int $userId
@@ -39,8 +51,14 @@ class Accounts {
             throw new Exception('Account not found.');
         }
 
+        $oldBalance = $account->balance;
+
         $account->balance += $amount;
         $account->save();
+
+        $newBalance = $account->balance;
+
+        $this->extractsService->storeDeposit($amount, $oldBalance, $newBalance, $account);
 
         return true;
     }

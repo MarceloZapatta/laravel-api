@@ -26,4 +26,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('btc/purchase', 'CryptController@purchase');
     $router->post('btc/sell', 'CryptController@sell');
     $router->get('btc', 'CryptController@position');
+
+    $router->get('extract', 'ExtractController@extract');
 });

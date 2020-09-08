@@ -24,11 +24,18 @@ class Crypts
      */
     private $client;
 
-    public function __construct()
+    /**
+     * @var Extracts
+     */
+    private $extractsService;
+
+    public function __construct(Extracts $extractsService)
     {
         $this->client = new \GuzzleHttp\Client([
             'base_uri' => $this->baseUrl
         ]);
+
+        $this->extractsService = $extractsService;
     }
 
     public function price()
@@ -69,6 +76,14 @@ class Crypts
         $account->balance -= $amount;
         $account->save();
 
+        $cryptQuantity = number_format(($amount / $buyPrice), 5, '.', '');
+
+        $this->extractsService->storePurchase(
+            $amount, 
+            number_format($buyPrice, 5, '.', ''), 
+            $cryptQuantity,
+            $account);
+
         return $investiment;
     }
 
@@ -89,6 +104,13 @@ class Crypts
             $account->save();
 
             $totalAmountSell -= $totalCryptSell;
+
+            $this->extractsService->storeSell(
+                $amount, 
+                $investiment->price, 
+                $sellPrice,
+                $cryptQuantity,
+                $account);
 
             if (number_format($totalAmountSell, 2, '.', '') <= 0) {
                 break;

@@ -70,4 +70,30 @@ class AccountsController
             ], 500);
         }
     }
+
+    public function extract(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'begin_date' => 'nullable|date_format:Y-m-d',
+                'end_date' => 'nullavel|date_format:Y-m-d'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            $extract = $this->accountsService->get($request);
+
+            return response()->json([
+                'extract' => $extract
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'An error ocurred.'
+            ], 500);
+        }
+    }
 }
