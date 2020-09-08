@@ -89,6 +89,11 @@ class Extracts {
         return $extract;
     }
 
+    /**
+     * Get the extract of an account
+     * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     */
     public function get(Request $request, Account $account)
     {        
         $extracts = Extract::select('id', 'data', 'extract_type_id', 'created_at')
@@ -120,6 +125,10 @@ class Extracts {
         });
     }
 
+    /**
+     * Get buy/sel volume of the day
+     * @return array
+     */
     public function getVolume()
     {
         $today = Carbon::now()->format('Y-m-d');
