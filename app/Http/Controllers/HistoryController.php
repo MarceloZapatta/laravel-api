@@ -5,15 +5,18 @@ namespace App\Http\Controllers;
 use App\Service\Histories;
 
 class HistoryController extends Controller {
-    private $Historieservice;
+    private $historieService;
 
-    public function __construct(Histories $Historieservice)
+    public function __construct(Histories $historieService)
     {
-        $this->Historieservice = $Historieservice;
+        $this->historieService = $historieService;
     }
 
+    /**
+     * Get the history of prices
+     */
     public function history()
     {
-        return $this->Historieservice->get();
+        return $this->historieService->get();
     }
 }

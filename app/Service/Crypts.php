@@ -41,6 +41,10 @@ class Crypts
         $this->extractsService = $extractsService;
     }
 
+    /**
+     * Get the current price
+     * @return json|null
+     */
     public function price()
     {
         $response = $this->client->get('ticker');
@@ -48,6 +52,10 @@ class Crypts
         return json_decode($response->getBody());
     }
 
+    /**
+     * Check if user has insufficientFunds
+     * @return bool
+     */
     public function insufficientFunds($amount, Account $account)
     {
         if ((float) $account->balance < (float) $amount) {
@@ -93,6 +101,14 @@ class Crypts
         return $investiment;
     }
 
+    /**
+     * Sell an amount of the crypt
+     * @param double $amount
+     * @param double $sellPrice
+     * @param Account $account
+     * @param Collection $investiments
+     * @return Investiment|null
+     */
     public function sell($amount, $sellPrice, Account $account, Collection $investiments)
     {
         DB::beginTransaction();
@@ -144,14 +160,18 @@ class Crypts
             $this->purcharse($absoluteValue, $buyPrice, $account);
         }
 
+        DB::commit();
+
         Mail::to(Auth::user())
             ->send(new CryptSell($totalCryptQuantitySell, $totalAmountSell));
-
-        DB::commit();
 
         return true;
     }
 
+    /**
+     * Get the active investiments
+     * @param double $currentSellPrice
+     */
     public function position($currentSellPrice)
     {
         $account = Auth::user()->account;
@@ -179,6 +199,13 @@ class Crypts
         });
     }
 
+    /**
+     * Check if account has enough investiments to sell
+     * @param Collection $investiments
+     * @param double $currentSellPrice
+     * @param double $amount
+     * @return bool
+     */
     public function enoughToSell(Collection $investiments, $currentSellPrice, $amount)
     {
         $totalInvestimentsSell = $investiments->reduce(function ($cont, $item) use ($currentSellPrice) {
