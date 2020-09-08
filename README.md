@@ -8,10 +8,6 @@ Instalar dependências composer
   
 `composer install`
 
-Instalar dependências npm
-
-`npm i`
-
 Copiar o .env.example para a raiz como .env
 Criar um novo banco de dados e configurar no .env
 
@@ -26,10 +22,6 @@ Gerar o secret do JWT
 Rodar as migrations
 
 `php artisan migrate`
-
-Build dos assets
-
-`npm run dev`
 
 Rodar a api:
 
