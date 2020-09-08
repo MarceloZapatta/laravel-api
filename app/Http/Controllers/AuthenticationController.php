@@ -23,6 +23,7 @@ class AuthenticationController
     /**
      * Register a new user
      * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request)
     {
@@ -55,7 +56,7 @@ class AuthenticationController
 
     /**
      * Return a JWT token
-     * @return array
+     * @return \Illuminate\Http\JsonResponse
      */
     public function login(Request $request)
     {
