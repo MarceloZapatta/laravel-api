@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Account;
 use App\Extract;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class Extracts {
@@ -96,11 +97,15 @@ class Extracts {
             ->orderBy('created_at', 'desc');
         
         if (!empty($request->begin_date)) {
-            $extracts->where('created_at', '>=', $request->begin_date);
+            $extracts->whereDate('created_at', '>=', $request->begin_date);
         }
         
         if (!empty($request->end_date)) {
-            $extracts->where('created_at', '<=', $request->end_date);
+            $extracts->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        if (empty($request->begin_date) && empty($request->end_date)) {
+            $extracts->whereDate('created_at', '>=', Carbon::now()->subDays(90));
         }
 
         $extracts = $extracts->get();
