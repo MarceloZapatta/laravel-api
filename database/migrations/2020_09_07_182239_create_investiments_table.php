@@ -18,7 +18,7 @@ class CreateInvestimentsTable extends Migration
             $table->foreignId('account_id')->constrained();
             $table->decimal('amount');
             $table->decimal('price', 10, 5);
-            $table->foreignId('investiment_type_id')->constrained();
+            $table->dateTime('liquidated_at')->nullable()->default(NULL);
             $table->timestamps();
         });
     }

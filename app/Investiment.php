@@ -11,11 +11,6 @@ class Investiment extends Model {
      * @var array
      */
     protected $fillable = [
-        'account_id', 'amount', 'price', 'investiment_type_id'
+        'account_id', 'amount', 'price'
     ];
-
-    public function type()
-    {
-        return $this->belongsTo('App\InvestimentType', 'investiment_type_id');
-    }
 }

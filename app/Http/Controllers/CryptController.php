@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Account;
 use App\Service\Accounts;
 use App\Service\Crypts;
+use App\Service\Investiments;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +17,15 @@ class CryptController
      */
     private $cryptsService;
 
-    public function __construct(Crypts $cryptsService)
+    /**
+     * @param Investiments
+     */
+    private $investimentsService;
+
+    public function __construct(Crypts $cryptsService, Investiments $investimentsService)
     {
         $this->cryptsService = $cryptsService;
+        $this->investimentsService = $investimentsService;
     }
 
     /**
@@ -105,6 +111,66 @@ class CryptController
                 'purchasedAmount' => $purchaseAmount
             ], 200);
         } catch (Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred.'
+            ], 500);
+        }
+    }
+
+    public function sell(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'amount' => 'required|numeric|max:9999999999999999999'
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            $account = Auth::user()->account;
+
+            if (!$account) {
+                return response()->json([
+                    'message' => 'Account not found.'
+                ], 500);
+            }
+
+            $price = $this->price();
+
+            $sellPrice = $price->getData()->sell;
+
+            if (!$sellPrice) {
+                return response()->json([
+                    'message' => 'Error when trying to get crypt price.'
+                ], 500);
+            }
+
+            $investiments = $this->investimentsService->getOpen($account);
+
+            $enoughToSell = $this->cryptsService->enoughToSell($investiments, $sellPrice, $request->amount);
+
+            if (!$enoughToSell) {
+                return response()->json([
+                    'message' => 'You don\'t have the amount sufficient to sell.'
+                ], 400);
+            }
+
+            $sell = $this->cryptsService->sell($request->amount, $sellPrice, $account, $investiments);
+
+            if (!$sell) {
+                return response()->json([
+                    'message' => 'Error when trying to sell the crypt'
+                ], 500);
+            }
+
+            return response()->json([
+                'message' => 'Success.'
+            ], 200);
+        } catch (Exception $e) {
+            dd($e->getMessage());
             return response()->json([
                 'message' => 'An error occurred.'
             ], 500);

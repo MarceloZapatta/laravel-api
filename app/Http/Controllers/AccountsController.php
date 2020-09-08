@@ -42,7 +42,7 @@ class AccountsController
 
             return response()->json([
                 'message' => 'Success.'
-            ], 201);
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'An error ocurred.'
