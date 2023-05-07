@@ -1,4 +1,4 @@
-# Desafio backend Eduzz
+# API de exemplo Laravel
 
 ## Instruções
 
