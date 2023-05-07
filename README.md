@@ -34,11 +34,3 @@ Rodar os jobs:
 Armazenar histórico BTC
 
 `php artisan crypt:history`
-
-## Observações
-
-Tentei manter os mesmos endpoints da API de exemplo.
-
-#### Item 11) Histórico:
-
-Gerei um novo command no artisan para armazenar o histórico no momento que roda. Sendo assim seria só configurar um CRON para rodar a cada 10 minutos com esse comando.
